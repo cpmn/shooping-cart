@@ -56,12 +56,23 @@ function App() {
   const restockProducts = (url) => {
     doFetch(url);
     let newItems = data.map((item) => {
-      let { name, country, cost, instock } = item;
-      return { name, country, cost, instock };
+      let { id, name, country, cost, instock } = item;
+      return { id, name, country, cost, instock };
     });
-    console.log(JSON.stringify(newItems));
-    
-    //setItems([...items, ...newItems]);
+
+    let newProducts = items.concat(newItems);
+
+    let prod = newProducts.reduce(
+      (product,elem) => {
+        if (product[elem.id]){
+          product[elem.id].instock = product[elem.id].instock + elem.instock;
+        }else {
+          product[elem.id] = elem;
+        }
+        return product;
+      }, {});
+
+    setItems(Object.values(prod));
   };
 
 
